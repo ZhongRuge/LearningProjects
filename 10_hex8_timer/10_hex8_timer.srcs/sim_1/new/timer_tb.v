@@ -29,34 +29,7 @@ module timer_tb();
         #100;
         rst_n = 1;
 
-        uut.tx_input_data = 8'hB3;
-        uut.send_go_flag = 1;
-        #20;
-        uut.send_go_flag = 0;
-        wait(uut.rx_done_flag);
-        #100;
-
-        uut.tx_input_data = 8'hA5;
-        uut.send_go_flag = 1;
-        #20;
-        uut.send_go_flag = 0;
-        wait(uut.rx_done_flag);
-        #100;
-
-        uut.tx_input_data = 8'hFF;
-        uut.send_go_flag = 1;
-        #20;
-        uut.send_go_flag = 0;
-        wait(uut.rx_done_flag);
-        #100;
-
-        uut.tx_input_data = 8'h3D;
-        uut.send_go_flag = 1;
-        #20;
-        uut.send_go_flag = 0;
-        wait(uut.rx_done_flag);
-        #2000000; 
-
+        #1000000000; // Run for 1 second
         $stop;
     end
 

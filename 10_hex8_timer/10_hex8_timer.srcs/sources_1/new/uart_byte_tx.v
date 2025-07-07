@@ -79,33 +79,62 @@ module uart_byte_tx(
     always@(posedge clk or negedge reset_n)
         if(!reset_n) begin
             uart_tx <= 1'b0;
+            tx_done <= 0;
         end
         else begin
             case(bps_cnt)
-                1:uart_tx <= 0;
-                2:uart_tx <= r_data[0];
-                3:uart_tx <= r_data[1];
-                4:uart_tx <= r_data[2];
-                5:uart_tx <= r_data[3];
-                6:uart_tx <= r_data[4];
-                7:uart_tx <= r_data[5];
-                8:uart_tx <= r_data[6];
-                9:uart_tx <= r_data[7];
-                10:uart_tx <= 1;
+                1:begin
+                    uart_tx <= 0;
+                    tx_done <= 0;
+                end
+                2:begin
+                    uart_tx <= r_data[0];
+                    tx_done <= 0;
+                end
+                3:begin
+                    uart_tx <= r_data[1];
+                    tx_done <= 0;
+                end
+                4:begin
+                    uart_tx <= r_data[2];
+                    tx_done <= 0;
+                end
+                5:begin
+                    uart_tx <= r_data[3];
+                    tx_done <= 0;
+                end
+                6:begin
+                    uart_tx <= r_data[4];
+                    tx_done <= 0;
+                end
+                7:begin
+                    uart_tx <= r_data[5];
+                    tx_done <= 0;
+                end
+                8:begin
+                    uart_tx <= r_data[6];
+                    tx_done <= 0;
+                end
+                9:begin
+                    uart_tx <= r_data[7];
+                    tx_done <= 0;
+                end
+                10:begin
+                    uart_tx <= 1;
+                    if(bps_clk == 1)
+                        tx_done <= 1;
+                    else
+                        tx_done <= 0;
+                end
                 11:begin
                     uart_tx <= 1;
-                    tx_done <= 1'b1;
+                    tx_done <= 0;
                 end
-                default:uart_tx <= 1;
+                default:begin
+                    uart_tx <= 1;
+                    tx_done <= 0;
+                end
             endcase
         end
-
-    always@(posedge clk or negedge reset_n)
-        if(!reset_n)
-            tx_done <= 0;
-        else if((bps_clk == 1) && (bps_cnt == 10))
-            tx_done <= 1;
-        else
-            tx_done <= 0;
 
 endmodule
