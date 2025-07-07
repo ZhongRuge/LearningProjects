@@ -3,7 +3,8 @@
 module hex8_HC595(
     input clk,
     input rst_n,
-    input [31:0] data,
+    input [31:0] disp_data,
+
     output [7:0] sel,
     output [7:0] seg,
     output SH_CP,
@@ -11,9 +12,6 @@ module hex8_HC595(
     output DS
 );
 
-    wire [31:0] disp_data;
-    assign disp_data = data;
-    
     hex8_2 hex8_2 (
         .clk(clk),
         .rst_n(rst_n),
@@ -36,6 +34,5 @@ module hex8_HC595(
         .DS(DS)
     );
 
-    assign disp_data = data;
 
 endmodule
