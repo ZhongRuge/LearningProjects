@@ -1,6 +1,6 @@
 `timescale 1ns / 1ps
 `define baud_set 4
-`define second_bps 1000000
+`define second_bps 30000
 
 module timer(
     input clk,

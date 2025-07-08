@@ -29,7 +29,7 @@ module timer_tb();
         #100;
         rst_n = 1;
 
-        #1000000000; // Run for 1 second
+        #1000000000;
         $stop;
     end
 
