@@ -24,8 +24,6 @@ module iddrtest_tb();
         #200;
         rst_n = 1;
         
-        #200;      
-        
         for (i = 0; i < 4096; i = i + 1) begin
             @(posedge clk_100m);
             single_data_input = inputdata[i];
