@@ -19,7 +19,7 @@ module iddrtest_tb();
     integer i;
     initial begin
         single_data_input = 0;
-        $readmemh("E:/zrg/FPGA/Projects/LearningProjects/iddr_test/sine_wave.txt", inputdata);
+        $readmemh("D:/Coding/Xilinx/Project/LearningProjects/iddr_test/sine_wave.txt", inputdata);
         rst_n = 0;
         #200;
         rst_n = 1;
