@@ -1,10 +1,10 @@
 // Copyright 1986-2018 Xilinx, Inc. All Rights Reserved.
 // --------------------------------------------------------------------------------
 // Tool Version: Vivado v.2018.3 (win64) Build 2405991 Thu Dec  6 23:38:27 MST 2018
-// Date        : Sat Jul 12 01:55:23 2025
+// Date        : Sat Jul 12 16:14:27 2025
 // Host        : DESKTOP-GT4QEG3 running 64-bit major release  (build 9200)
-// Command     : write_verilog -force -mode funcsim -rename_top clk_wiz_0 -prefix
-//               clk_wiz_0_ clk_wiz_0_sim_netlist.v
+// Command     : write_verilog -force -mode funcsim -rename_top decalper_eb_ot_sdeen_pot_pi_dehcac_xnilix -prefix
+//               decalper_eb_ot_sdeen_pot_pi_dehcac_xnilix_ clk_wiz_0_sim_netlist.v
 // Design      : clk_wiz_0
 // Purpose     : This verilog netlist is a functional simulation representation of the design and should not be modified
 //               or synthesized. This netlist cannot be used for SDF annotated simulation.
@@ -13,7 +13,7 @@
 `timescale 1 ps / 1 ps
 
 (* NotValidForBitStream *)
-module clk_wiz_0
+module decalper_eb_ot_sdeen_pot_pi_dehcac_xnilix
    (clk_out1,
     reset,
     clk_in1);
@@ -25,13 +25,13 @@ module clk_wiz_0
   wire clk_out1;
   wire reset;
 
-  clk_wiz_0_clk_wiz_0_clk_wiz inst
+  decalper_eb_ot_sdeen_pot_pi_dehcac_xnilix_clk_wiz_0_clk_wiz inst
        (.clk_in1(clk_in1),
         .clk_out1(clk_out1),
         .reset(reset));
 endmodule
 
-module clk_wiz_0_clk_wiz_0_clk_wiz
+module decalper_eb_ot_sdeen_pot_pi_dehcac_xnilix_clk_wiz_0_clk_wiz
    (clk_out1,
     reset,
     clk_in1);
@@ -89,7 +89,7 @@ module clk_wiz_0_clk_wiz_0_clk_wiz
     .CLKFBOUT_USE_FINE_PS("FALSE"),
     .CLKIN1_PERIOD(10.000000),
     .CLKIN2_PERIOD(0.000000),
-    .CLKOUT0_DIVIDE_F(2.500000),
+    .CLKOUT0_DIVIDE_F(5.000000),
     .CLKOUT0_DUTY_CYCLE(0.500000),
     .CLKOUT0_PHASE(0.000000),
     .CLKOUT0_USE_FINE_PS("FALSE"),

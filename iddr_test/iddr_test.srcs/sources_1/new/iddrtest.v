@@ -3,19 +3,17 @@
 module iddrtest(
     input clk_100m,
     input rst_n,
-    input [7:0] single_data_input,
-
-    output clk_400m
+    input [7:0] single_data_input
     );
 
 
 
-    reg [7:0] whole_data_input [0:4095];
+    // 控制single_data_input按照addra的顺序写入到whole_data_input
     reg wea;
+    reg [7:0]dina;
     reg [11:0] addra;
 
 
-    // 控制single_data_input按照addra的顺序写入到whole_data_input
     always @(posedge clk_100m or negedge rst_n) begin
         if(!rst_n) begin
             wea <= 0;
@@ -23,43 +21,53 @@ module iddrtest(
         end
         else begin
             wea <= 1;
-            if (addra < 4095) begin
-                addra <= addra + 1;
-            end
-            else begin
-                wea <= 0;
-            end
+            addra <= addra + 1;
         end
     end
 
     always @(posedge clk_100m) begin
         if (wea) begin
-            whole_data_input[addra] <= single_data_input;
+            dina <= single_data_input;
+        end
+    end
+
+
+
+    // 读取验证数据过程
+    wire [7:0] doutb;
+    reg [11:0] addrb;
+
+
+    always @(posedge clk_100m or negedge rst_n) begin
+        if (!rst_n) begin
+            addrb <= 0;
+        end
+        else begin
+            if (addrb < 4095) begin
+                addrb <= addrb + 1;
+            end
+            else begin
+                addrb <= 0;
+            end
         end
     end
 
 
 
     blk_mem_gen_0 input_data_bram (
-        .clka(clka),    // input wire clka
+        .clka(clk_400m),    // input wire clka
         .wea(wea),      // input wire [0 : 0] wea
         .addra(addra),  // input wire [11 : 0] addra
         .dina(dina),    // input wire [7 : 0] dina
-        .clkb(clkb),    // input wire clkb
+        .clkb(clk_100m),    // input wire clkb
         .addrb(addrb),  // input wire [11 : 0] addrb
-        .doutb(doutb)  // output wire [7 : 0] doutb
+        .doutb(doutb)   // output wire [7 : 0] doutb
     );
 
-
-    wire locked;
     clk_wiz_0 clk_wiz_0(
-        // Clock out ports
-        .clk_out1(clk_400m),     // output clk_out1
-        // Status and control signals
-        .reset(rst_n), // input reset
-        .locked(locked),       // output locked
-        // Clock in ports
-        .clk_in1(clk_100m)      // input clk_in1
+        .clk_out1(clk_400m),   // output clk_out1
+        .reset(!rst_n),        // input reset
+        .clk_in1(clk_100m)     // input clk_in1
     );
 
 endmodule
