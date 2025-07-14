@@ -40,7 +40,7 @@ module iddrtest_tb();
     initial begin
         single_data_input = 0;
         i = 0;
-        $readmemh("D:/Coding/Xilinx/Project/LearningProjects/iddr_test/sine_wave.txt", inputdata);
+        $readmemh("E:/zrg/FPGA/Projects/LearningProjects/iddr_test/sine_wave.txt", inputdata);
         rst_n = 0;
         #200;
         rst_n = 1;

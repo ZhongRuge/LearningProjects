@@ -7,14 +7,12 @@ module iddrtest(
     );
 
 
-
     // 控制single_data_input按照addra的顺序写入到whole_data_input
     reg wea;
     reg [7:0]dina;
     reg [11:0] addra;
 
-
-    always @(posedge clk_100m or negedge rst_n) begin
+    always @(posedge clk_400m or negedge rst_n) begin
         if(!rst_n) begin
             wea <= 0;
             addra <= 0;
@@ -25,7 +23,7 @@ module iddrtest(
         end
     end
 
-    always @(posedge clk_100m) begin
+    always @(posedge clk_400m) begin
         if (wea) begin
             dina <= single_data_input;
         end
@@ -37,12 +35,11 @@ module iddrtest(
     wire [7:0] doutb;
     reg [11:0] addrb;
 
-
     always @(posedge clk_100m or negedge rst_n) begin
         if (!rst_n) begin
             addrb <= 0;
         end
-        else begin
+        else begin // 循环读取
             if (addrb < 4095) begin
                 addrb <= addrb + 1;
             end
@@ -51,6 +48,32 @@ module iddrtest(
             end
         end
     end
+
+
+
+
+    // 为每一位数据创建IDDR实例 
+    // 有多少位的数据就循环多少次，其实是为每一位数据创建一个IDDR实例
+    wire [7:0] Q1, Q2;  // 8位输出
+    genvar i;
+    generate
+        for (i = 0; i < 8; i = i + 1) begin : iddr_gen
+            IDDR #(
+                .DDR_CLK_EDGE("OPPOSITE_EDGE"),
+                .INIT_Q1(1'b0),
+                .INIT_Q2(1'b0),
+                .SRTYPE("SYNC")
+            ) IDDR_inst (
+                .Q1(Q1[i]),
+                .Q2(Q2[i]),
+                .C(clk_100m),
+                .CE(1'b1),
+                .D(single_data_input[i]),
+                .R(~rst_n),
+                .S(1'b0)
+            );
+        end
+    endgenerate
 
 
 
