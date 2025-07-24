@@ -2,69 +2,90 @@
 
 module pingpong(
     input clk_50m,
-    input rst_n,
-    input [7:0] single_data_input,
-    input [15:0] ram1_read_data, // 从RAM1读取的数据
-    input [15:0] ram2_read_data, // 从RAM2读取的数据
+    input sys_rst_n
+    );
+    
+    //wire define
+    wire rst_n ; //复位信号
+    wire [15:0] ping_read_data ; //ram1读数据
+    wire [15:0] pong_read_data ; //ram2读数据
+    wire data_en ; //输入数据使能信号
+    wire [7:0] data_in ; //输入数据
+    wire ping_write_en ; //ram1写使能
+    wire ping_read_en ; //ram1读使能
+    wire [9:0] ping_write_addr ; //ram1写地址
+    wire [8:0] ping_read_addr ; //ram1读地址
+    wire [7:0] ping_write_data ; //ram1写数据
+    wire pong_write_en ; //ram2写使能
+    wire pong_read_en ; //ram2读使能
+    wire [9:0] pong_write_addr ; //ram2写地址
+    wire [8:0] pong_read_addr ; //ram2读地址
+    wire [7:0] pong_write_data ; //ram2写数据
+    wire [15:0] data_out ; //输出乒乓操作数据
+    wire locked ; //PLl核输出稳定时钟标志信号，高有效
 
-    output [15:0] data_out
+    assign rst_n = sys_rst_n && locked; //复位信号
+
+
+    data_gen data_gen (
+        .clk_50m(clk_50m),
+        .rst_n(rst_n),
+        .data_en(data_en),
+        .data_in(data_in)
     );
 
-    reg [7:0] single_data_input_reg;
-
-    // clk_25m稳定了之后进行数据读写
-    reg data_read_en;
-    always @(*) begin
-        data_read_en <= locked;
-    end
-
-
-    // 状态机
-    reg [2:0] state;
-    parameter 
-    IDLE = 4'b0001,
-    WPING = 4'b0010,
-    WPONG_RPING = 4'b0100,
-    WPING_RPONG = 4'b1000;
-
-
-
-
-
-
-
-
-    
 
     ping ping (
         .clka(clk_50m),    // input wire clka
         .ena(1'b1),      // input wire ena
-        .wea(ping_wea),      // input wire [0 : 0] wea
-        .addra(ping_addra),  // input wire [9 : 0] addra
-        .dina(ping_dina),    // input wire [7 : 0] dina
+        .wea(ping_write_en),      // input wire [0 : 0] wea
+        .addra(ping_write_addr),  // input wire [9 : 0] addra
+        .dina(ping_write_data),    // input wire [7 : 0] dina
         .clkb(clk_25m),    // input wire clkb
         .enb(1'b1),      // input wire enb
-        .addrb(addrb),  // input wire [8 : 0] addrb
-        .doutb(doutb)  // output wire [15 : 0] doutb
+        .addrb(ping_read_addr),  // input wire [8 : 0] addrb
+        .doutb(ping_read_data)  // output wire [15 : 0] doutb
     );
 
 
     pong pong (
         .clka(clk_50m),    // input wire clka
         .ena(1'b1),      // input wire ena
-        .wea(pong_wea),      // input wire [0 : 0] wea
-        .addra(pong_addra),  // input wire [9 : 0] addra
-        .dina(pong_dina),    // input wire [7 : 0] dina
+        .wea(pong_write_en),      // input wire [0 : 0] wea
+        .addra(pong_write_addr),  // input wire [9 : 0] addra
+        .dina(pong_write_data),    // input wire [7 : 0] dina
         .clkb(clk_25m),    // input wire clkb
         .enb(1'b1),      // input wire enb
-        .addrb(pong_addrb),  // input wire [8 : 0] addrb
-        .doutb(pong_doutb)  // output wire [15 : 0] doutb
+        .addrb(pong_read_addr),  // input wire [8 : 0] addrb
+        .doutb(pong_read_data)  // output wire [15 : 0] doutb
+    );
+
+
+    ram_control ram_control (
+        .clk_50m(clk_50m),
+        .clk_25m(clk_25m),
+        .rst_n(rst_n),
+        .ping_read_data(ping_read_data),
+        .pong_read_data(pong_read_data),
+        .data_en(data_en),
+        .single_data_input(data_in),
+        .ping_write_en(ping_write_en),
+        .ping_read_en(ping_read_en),
+        .ping_write_addr(ping_write_addr),
+        .ping_read_addr(ping_read_addr),
+        .ping_write_data(ping_write_data),
+        .pong_write_en(pong_write_en),
+        .pong_read_en(pong_read_en),
+        .pong_write_addr(pong_write_addr),
+        .pong_read_addr(pong_read_addr),
+        .pong_write_data(pong_write_data),
+        .data_out(data_out)
     );
 
 
     clk_wiz_0 clk_wiz_0 (
         .clk_out1(clk_25m),
-        .reset(~rst_n),
+        .reset(~sys_rst_n),
         .clk_in1(clk_50m),
         .locked(locked)
     );

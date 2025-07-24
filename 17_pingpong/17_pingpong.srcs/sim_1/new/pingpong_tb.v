@@ -2,56 +2,37 @@
 
 module pingpong_tb();
 
-    reg clk_50m;
-    reg rst_n;
 
-    wire clk_25m;
-    assign clk_25m = pingpong_inst.clk_25m;
+//reg define
+reg clk_50m ;
+reg sys_rst_n ;
 
-    reg [7:0] single_data_input;
-    pingpong pingpong_inst (
-        .clk_50m(clk_50m),
-        .rst_n(rst_n),
-        .single_data_input(single_data_input)
-    );
+////
+//\* Main Code \//
+////
 
+initial
+begin
+clk_50m = 1'b1;
+sys_rst_n <= 1'b0;
+#200
+sys_rst_n <= 1'b1;
+end
 
-    initial clk_50m = 1;
-    always #10 clk_50m = ~clk_50m;
+//clk_50m:模拟系统时钟，每10ns电平取反一次，周期为20ns，频率为50Mhz
+always #10 clk_50m = ~clk_50m;
 
+////
+//\* Instantiation \//
+////
 
-    // 输入数据
-    reg [7:0] inputdata [8190:0];
-    integer i;
-    always @(posedge clk_50m) begin
-        if (!rst_n) begin
-            i <= 0;
-            single_data_input <= 0;
-        end else begin
-            single_data_input <= inputdata[i];
-            if (i < 8191) begin
-                i <= i + 1;
-            end
-            else begin
-                i <= 0;
-            end
-        end
-    end
+//-------------pingpong_inst-------------
+pingpong pingpong_inst
+(
+.clk_50m (clk_50m ), //系统时钟
+.sys_rst_n (sys_rst_n ) //复位信号，低有效
 
+);
 
-    initial begin
-        // 读取sine_wave.txt
-        $readmemh("E:/zrg/FPGA/Projects/LearningProjects/17_pingpong/sawtooth_wave.txt", inputdata);
-
-
-
-        rst_n = 0;
-        #100;
-
-        rst_n = 1;
-        #100000;
-
-        $stop;
-    end
 
 endmodule
