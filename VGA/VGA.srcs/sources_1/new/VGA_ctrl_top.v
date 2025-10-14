@@ -8,13 +8,15 @@ module VGA_ctrl_top(
     output VGA_HS,
     output VGA_VS,
     output VGA_BLK,
-    output VGA_CLK_25MHz
+    output VGA_CLK_25MHz,
+    output VGA_BL
     );
 
+    assign VGA_BL = 1; // 使能VGA显示
 
     reg [23:0] pixel_data;
-    wire [9:0] Hcounter;
-    wire [9:0] Vcounter;
+    wire [11:0] Hcounter;
+    wire [11:0] Vcounter;
     wire clk_25MHz;
 
 

@@ -35,7 +35,7 @@ module VGA_ctrl_tb();
         rst_n = 0;
         # 201;
         rst_n = 1;
-        # 2000000;
+        # 20000000;
         $stop;
     end
 

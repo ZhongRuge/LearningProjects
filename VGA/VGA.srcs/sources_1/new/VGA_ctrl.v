@@ -1,4 +1,5 @@
 `timescale 1ns / 1ps
+`include "VGA_param.v"
 
 module VGA_ctrl(
     input clk,
@@ -6,8 +7,8 @@ module VGA_ctrl(
     input [23:0] pixel_data, // 像素点数据
 
     output reg data_req, // 数据请求信号
-    output reg [9:0] Hcounter, // 当前扫描的H坐标（显示区域内的像素点坐标）
-    output reg [9:0] Vcounter,  // 当前扫描的V坐标
+    output reg [11:0] Hcounter, // 当前扫描的H坐标（显示区域内的像素点坐标）
+    output reg [11:0] Vcounter,  // 当前扫描的V坐标
     output reg VGA_HS,
     output reg VGA_VS,
     output reg VGA_BLK, // BLK表示数据输出时间段（有效信号）
@@ -15,22 +16,24 @@ module VGA_ctrl(
     output VGA_CLK
     );
 
-    reg [9:0] HS_counter;
-    reg [9:0] VS_counter;
+    reg [11:0] HS_counter;
+    reg [11:0] VS_counter;
+
+
 
     // 行同步信号
     localparam HSYNC_PLUSE_BEGIN = 0; // 脉冲开始时间
-    localparam HSYNC_PLUSE_END = 96; // 脉冲结束时间
-    localparam HSYNC_DATA_BEGIN = 144; // 数据开始时间
-    localparam HSYNC_DATA_END = 784; // 数据结束时间
-    localparam HSYNC_END = 800; // 总时间
+    localparam HSYNC_PLUSE_END = `H_Sync_Time; // 脉冲结束时间
+    localparam HSYNC_DATA_BEGIN = `H_Sync_Time + `H_Left_Border + `H_Back_Porch; // 数据开始时间
+    localparam HSYNC_DATA_END = `H_Sync_Time + `H_Left_Border + `H_Back_Porch + `H_Data_Time; // 数据结束时间
+    localparam HSYNC_END = `H_Total_Time; // 总时间
 
     // 列同步信号
     localparam VSYNC_PLUSE_BEGIN = 0; // 脉冲开始时间
-    localparam VSYNC_PLUSE_END = 2; // 脉冲结束时间
-    localparam VSYNC_DATA_BEGIN = 35; // 数据开始时间
-    localparam VSYNC_DATA_END = 515; // 数据结束时间
-    localparam VSYNC_END = 525; // 总时间
+    localparam VSYNC_PLUSE_END = `V_Sync_Time; // 脉冲结束时间
+    localparam VSYNC_DATA_BEGIN = `V_Sync_Time + `V_Top_Border + `V_Back_Porch; // 数据开始时间
+    localparam VSYNC_DATA_END = `V_Sync_Time + `V_Top_Border + `V_Back_Porch + `V_Data_Time; // 数据结束时间
+    localparam VSYNC_END = `V_Total_Time; // 总时间
 
 
     always @(posedge clk or negedge rst_n) begin
@@ -100,5 +103,6 @@ module VGA_ctrl(
         Vcounter <= data_req ? (VS_counter - VSYNC_DATA_BEGIN) : 0;
     end
 
+    assign VGA_CLK = !clk;
 
 endmodule

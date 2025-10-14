@@ -3,8 +3,8 @@
 // Tool Version: Vivado v.2018.3 (win64) Build 2405991 Thu Dec  6 23:38:27 MST 2018
 // Date        : Tue Oct 14 22:54:37 2025
 // Host        : DESKTOP-OD6O7GO running 64-bit major release  (build 9200)
-// Command     : write_verilog -force -mode funcsim
-//               d:/Coding/Xilinx/Project/LearningProjects/VGA/VGA.srcs/sources_1/ip/VGA_PLL/VGA_PLL_sim_netlist.v
+// Command     : write_verilog -force -mode funcsim -rename_top decalper_eb_ot_sdeen_pot_pi_dehcac_xnilix -prefix
+//               decalper_eb_ot_sdeen_pot_pi_dehcac_xnilix_ VGA_PLL_sim_netlist.v
 // Design      : VGA_PLL
 // Purpose     : This verilog netlist is a functional simulation representation of the design and should not be modified
 //               or synthesized. This netlist cannot be used for SDF annotated simulation.
@@ -13,7 +13,7 @@
 `timescale 1 ps / 1 ps
 
 (* NotValidForBitStream *)
-module VGA_PLL
+module decalper_eb_ot_sdeen_pot_pi_dehcac_xnilix
    (clk_out1,
     clk_in1);
   output clk_out1;
@@ -22,13 +22,12 @@ module VGA_PLL
   (* IBUF_LOW_PWR *) wire clk_in1;
   wire clk_out1;
 
-  VGA_PLL_VGA_PLL_clk_wiz inst
+  decalper_eb_ot_sdeen_pot_pi_dehcac_xnilix_VGA_PLL_clk_wiz inst
        (.clk_in1(clk_in1),
         .clk_out1(clk_out1));
 endmodule
 
-(* ORIG_REF_NAME = "VGA_PLL_clk_wiz" *) 
-module VGA_PLL_VGA_PLL_clk_wiz
+module decalper_eb_ot_sdeen_pot_pi_dehcac_xnilix_VGA_PLL_clk_wiz
    (clk_out1,
     clk_in1);
   output clk_out1;

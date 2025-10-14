@@ -56,7 +56,7 @@
 //  Output     Output      Phase    Duty Cycle   Pk-to-Pk     Phase
 //   Clock     Freq (MHz)  (degrees)    (%)     Jitter (ps)  Error (ps)
 //----------------------------------------------------------------------------
-// clk_out1____25.000______0.000______50.0______386.663____261.747
+// clk_out1____33.000______0.000______50.0______362.902____261.747
 //
 //----------------------------------------------------------------------------
 // Input Clock   Freq (MHz)    Input Jitter (UI)
@@ -121,7 +121,7 @@ wire clk_in2_VGA_PLL;
     .DIVCLK_DIVIDE        (2),
     .CLKFBOUT_MULT        (33),
     .CLKFBOUT_PHASE       (0.000),
-    .CLKOUT0_DIVIDE       (33),
+    .CLKOUT0_DIVIDE       (25),
     .CLKOUT0_PHASE        (0.000),
     .CLKOUT0_DUTY_CYCLE   (0.500),
     .CLKIN1_PERIOD        (20.000))
