@@ -5,10 +5,14 @@ module VGA_ctrl(
     input rst_n,
     input [23:0] pixel_data, // 像素点数据
 
+    output reg data_req, // 数据请求信号
+    output reg [9:0] Hcounter, // 当前扫描的H坐标（显示区域内的像素点坐标）
+    output reg [9:0] Vcounter,  // 当前扫描的V坐标
     output reg VGA_HS,
     output reg VGA_VS,
     output reg VGA_BLK, // BLK表示数据输出时间段（有效信号）
-    output reg [23:0]VGA_RGB
+    output reg [23:0]VGA_RGB,
+    output VGA_CLK
     );
 
     reg [9:0] HS_counter;
@@ -66,15 +70,35 @@ module VGA_ctrl(
         VGA_VS <= (VS_counter >= VSYNC_PLUSE_BEGIN && VS_counter < VSYNC_PLUSE_END) ? 0 : 1;
 
 
+    always @(posedge clk or negedge rst_n) begin
+        if(!rst_n) begin
+            data_req <= 1'b0;
+        end
+        else begin
+            data_req <= (HS_counter >= HSYNC_DATA_BEGIN && HS_counter < HSYNC_DATA_END &&
+                         VS_counter >= VSYNC_DATA_BEGIN && VS_counter < VSYNC_DATA_END) ? 1'b1 : 1'b0;
+        end
+    end
+
+
     // assign VGA_BLK = (HS_counter >= HSYNC_DATA_BEGIN && HS_counter < HSYNC_DATA_END &&
     //                   VS_counter >= VSYNC_DATA_BEGIN && VS_counter < VSYNC_DATA_END) ? 1 : 0;
     always @(posedge clk)
-        VGA_BLK <= (HS_counter >= HSYNC_DATA_BEGIN && HS_counter < HSYNC_DATA_END &&
-                          VS_counter >= VSYNC_DATA_BEGIN && VS_counter < VSYNC_DATA_END) ? 1 : 0;
+        VGA_BLK <= data_req;
+
 
     // assign VGA_RGB = VGA_BLK ? pixel_data : 0;
     always @(posedge clk)
         VGA_RGB <= VGA_BLK ? pixel_data : 0;
+
+
+    always @(posedge clk) begin
+        Hcounter <= data_req ? (HS_counter - HSYNC_DATA_BEGIN) : 0;
+    end
+
+    always @(posedge clk) begin
+        Vcounter <= data_req ? (VS_counter - VSYNC_DATA_BEGIN) : 0;
+    end
 
 
 endmodule
