@@ -6,7 +6,7 @@ module uart_byte_tx_tb();
     reg reset_n;
     reg [2:0]baud_set;
     reg [7:0]data;
-    reg send_en;
+    reg send_go;
     wire uart_tx;
     wire tx_done;
     
@@ -15,7 +15,7 @@ module uart_byte_tx_tb();
         .reset_n(reset_n),
         .baud_set(baud_set),
         .data(data),
-        .send_en(send_en),
+        .send_go(send_go),
         .uart_tx(uart_tx),
         .tx_done(tx_done)
     );
@@ -26,20 +26,20 @@ module uart_byte_tx_tb();
     initial begin
         reset_n = 0;
         data = 0;
-        send_en = 0;
+        send_go = 0;
         baud_set = 4;
         #201;
         reset_n = 1;
         #100;
         data = 8'h57;
-        send_en = 1;
+        send_go = 1;
         #20;
         @(posedge tx_done);
-        send_en = 0;
+        send_go = 0;
         #20000;
         
         data = 8'h75;
-        send_en = 1;
+        send_go = 1;
         #20;
         @(posedge tx_done);
         #20000;
