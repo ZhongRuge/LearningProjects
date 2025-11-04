@@ -1,3 +1,7 @@
+set_property SEVERITY {Warning} [get_drc_checks NSTD-1]
+set_property SEVERITY {Warning} [get_drc_checks RTSTAT-1]
+set_property SEVERITY {Warning} [get_drc_checks UCIO-1]
+
 set_property PACKAGE_PIN P5 [get_ports {VGA_RGB[23]}]
 set_property PACKAGE_PIN P4 [get_ports {VGA_RGB[22]}]
 set_property PACKAGE_PIN N3 [get_ports {VGA_RGB[21]}]
@@ -55,6 +59,3 @@ set_property PACKAGE_PIN R18 [get_ports VGA_BL]
 
 set_property IOSTANDARD LVCMOS33 [get_ports VGA_BL]
 
-set_property SEVERITY {Warning} [get_drc_checks NSTD-1]
-set_property SEVERITY {Warning} [get_drc_checks RTSTAT-1]
-set_property SEVERITY {Warning} [get_drc_checks UCIO-1]
